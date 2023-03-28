@@ -1,0 +1,6 @@
+#!/bin/bash
+
+export KDIR=/home/swastik/Linux/jammy
+export LIN_DIR=$KDIR
+export ROOT_DIR=/home/swastik/Linux/busybox/_install
+

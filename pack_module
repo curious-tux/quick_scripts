@@ -1,0 +1,22 @@
+#!/bin/bash
+DIR=$PWD
+
+if [ -z $ROOT_DIR ]
+then
+	ROOT_DIR=/home/swastik/qemu/busybox/_install
+fi
+
+if [ -z $LIN_DIR ]
+then
+	LIN_DIR=/home/swastik/qemu/linux-5.1.16
+fi
+
+cp *.ko $ROOT_DIR/root/modules
+cd $ROOT_DIR
+find .|cpio -o --format=newc>../rootfs.img
+gzip -c ../rootfs.img > ../rootfs.img.gz 
+cp ../rootfs.img.gz $LIN_DIR
+
+cd $DIR
+# echo $ROOT_DIR
+# echo $LIN_DIR

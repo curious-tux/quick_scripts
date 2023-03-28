@@ -1,0 +1,3 @@
+#!/bin/bash
+LIN_DIR=/home/swastik/Linux/jammy
+qemu-system-x86_64 -kernel $LIN_DIR/arch/x86_64/boot/bzImage --nographic -append "console=ttyS0 nokaslr root=/dev/ram rdinit=/linuxrc" -initrd $LIN_DIR/rootfs.img.gz -m 2048 $*

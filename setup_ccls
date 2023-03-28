@@ -1,0 +1,4 @@
+sudo apt install ccls -y
+sudo apt install clang libclang-dev -y
+sudo apt install llvm-dev rapidjson-dev -y
+sudo apt install cmake -y

@@ -1,0 +1,62 @@
+#!/usr/bin/env python3
+
+import sys
+import os
+if len(sys.argv) < 2:
+    print("Usage: makeup filename.c")
+    exit()
+
+FILES = ""
+MAKE_TYPE = os.environ.get("MAKE_TYPE"," ")
+ARCH = os.environ.get("ARCH"," ")
+CROSS_COMPILE = os.environ.get("CROSS_COMPILE"," ")
+
+
+EXTRA_ARGS = ""
+
+if ARCH != " ":
+    EXTRA_ARGS += f"ARCH={ARCH} "
+if CROSS_COMPILE != " ":
+    EXTRA_ARGS += f"CROSS_COMPILE={CROSS_COMPILE}"
+FILE_LIST = []
+for i in sys.argv[1:]:
+    FILE = i.split('.')[0]
+    FILE_LIST.append(FILE)
+    FILES +=f"obj-m += {FILE}.o\n"
+
+default_string="default:"
+make_cases=""
+if MAKE_TYPE.lower() == "common":
+    for file in FILE_LIST:
+        default_string += " " + file + ".o"
+        make_cases +=f'''
+{file}.o: {file}.c
+\tgcc -g -O0 {file}.c -o {file}.o
+'''
+
+    make_str = f'''
+{default_string}
+{make_cases}
+clean:
+\trm *.o
+'''
+    PATH = os.getcwd()
+    f = open(f"{PATH}/Makefile","w+")
+    f.write(make_str)
+    f.close()
+    exit(0)
+
+make_str = f'''
+{FILES}
+#KDIR=/lib/modules/$(shell uname -r)/build 
+
+all:
+\t$(MAKE) -C $(KDIR) M=$(shell pwd) {EXTRA_ARGS}
+
+clean:
+\t$(MAKE) -C $(KDIR) M=$(shell pwd) clean
+'''
+PATH = os.getcwd()
+f = open(f"{PATH}/Makefile","w+")
+f.write(make_str)
+f.close()

@@ -1,0 +1,18 @@
+#!/bin/bash
+
+
+if [ -z $ROOT_DIR ]
+then
+	ROOT_DIR=/home/swastik/qemu/busybox/_install
+fi
+
+cd $ROOT_DIR/root/modules
+if [ $# -gt 0 ]
+then
+	rm $*
+else 
+	rm *.ko
+fi
+
+
+

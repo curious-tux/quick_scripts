@@ -1,0 +1,2 @@
+#!/bin/bash
+PAGER=nvim python3 -m pydoc $1

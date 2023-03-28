@@ -1,0 +1,50 @@
+#!/bin/bash
+YOCTO_BUILD_DIR=/home/swastik/Workspace/Embedded/yocto/build
+
+if [ -z BUILDDIR ]; then
+	echo "Please source oe-init-build-env"
+	exit 1
+fi
+
+MACHINE=beaglebone
+if [ -e /dev/sdb ];then 
+	DISK=sdb
+fi
+IMAGE=custom-image
+while [ -n "$1" ];do 
+	case "$1" in 
+		-m)MACHINE=$2 ;;
+		-i)IMAGE=$2 ;;
+		-d)DISK=$2 ;;
+		*) echo "option not recognised" ;exit 1;
+	esac
+	shift
+done
+if [ -z DISK ];then
+	echo "sdcard not found"
+	exit
+fi
+
+
+IMAGE_BASE=${IMAGE}-${MACHINE}
+IMAGE_OUT="$IMAGE_BASE.wic.xz"
+IMAGES_DIR=$YOCTO_BUILD_DIR/tmp/deploy/images/${MACHINE}
+echo "Files"
+echo ${MACHINE}
+echo ${IMAGE_OUT}
+echo ${IMAGES_DIR}
+xzcat "${IMAGES_DIR}/${IMAGE_OUT}" > /dev/${DISK}
+if [ $? -ne 0 ];then
+	echo "problem with xzcat"
+	exit 1
+fi
+
+sudo mount /dev/${DISK}1 /mnt
+if [ $? -ne 0 ];then
+	echo "problem mounting"
+	exit 1
+fi
+sudo cp /home/swastik/Workspace/Embedded/uEnv.txt /mnt
+sudo cp /home/swastik/Workspace/Embedded/extlinux.conf /mnt/extlinux/
+sudo umount /mnt
+

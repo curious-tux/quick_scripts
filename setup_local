@@ -1,0 +1,2 @@
+#!/bin/bash
+export BBB_IP=10.42.0.127

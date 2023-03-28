@@ -1,0 +1,8 @@
+#!/bin/bash
+source /opt/poky/4.0.7/environment-setup-armv7at2hf-neon-poky-linux-gnueabi
+export KDIR=/home/swastik/Workspace/Embedded/yocto/build/tmp/work/beaglebone-poky-linux-gnueabi/linux-ti-staging/5.10.145+gitAUTOINC+8b51d20b6e-r22b/build
+export CROSS_COMPILE=arm-poky-linux-gnueabi-
+export ARCH=arm
+export LIN_DIR=$KDIR
+export ROOT_DIR=/home/swastik/qemu/busybox/_install
+

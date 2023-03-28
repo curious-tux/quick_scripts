@@ -1,0 +1,58 @@
+#!/bin/bash
+#
+
+if [ $# -ne 1 ];then
+	echo "Usage $0 [drive]"
+	exit 1
+fi
+
+DRIVE=$1
+
+if [ ! -e /sys/block/${DRIVE}/size ];then
+	echo "Drive does not exist"
+	exit 1
+fi 
+
+
+# if [ $? -ne 0 ];then
+# 	echo "Could not unmount "
+# 	exit 1
+# fi
+
+if [ $DRIVE == "mmcblk0" ];then
+	sudo umount /dev/${DRIVE}*
+	BOOT_PART=/dev/${DRIVE}p1
+	ROOT_PART=/dev/${DRIVE}p2
+else
+	sudo umount /dev/${DRIVE}[1-9]
+	BOOT_PART=/dev/${DRIVE}1
+	ROOT_PART=/dev/${DRIVE}2
+fi
+
+sudo dd if=/dev/zero of=/dev/${DRIVE} bs=1M count=10
+if [ $? -ne 0 ];then
+	echo "error with dd"
+	exit 1
+fi
+
+sudo sfdisk /dev/${DRIVE} << EOF
+,64M,0x0c,*
+,2048M,L,
+EOF
+if [ $? -ne 0 ];then
+	echo "error with sfdisk"
+	exit 1
+fi
+
+sudo mkfs.vfat -F 16 -n BOOT ${BOOT_PART}
+if [ $? -ne 0 ];then
+	echo "error with mkfs.vfat"
+	exit 1
+fi
+sudo mkfs.ext4 -L rootfs ${ROOT_PART}
+if [ $? -ne 0 ];then
+	echo "error with mkfs.ext4"
+	exit 1
+fi
+
+exit 0

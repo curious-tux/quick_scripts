@@ -1,0 +1,8 @@
+#!/bin/bash
+
+export KDIR=/home/swastik/qemu/linux-5.1.16 
+export CROSS_COMPILE=arm-linux-gnueabihf-
+export ARCH=arm
+export LIN_DIR=$KDIR
+export ROOT_DIR=/home/swastik/qemu/busybox/_install
+

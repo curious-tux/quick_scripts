@@ -1,0 +1,35 @@
+#!/bin/bash
+sudo apt update && sudo apt upgrade -y
+sudo apt-get install ninja-build gettext libtool libtool-bin autoconf automake cmake g++ pkg-config unzip curl doxygen -y
+sudo apt install numix-icon-theme* -y
+sudo apt install curl -y
+sudo apt install qemu-system-arm mc texinfo bat bridge-utils uml-utilities -y
+sudo curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg
+
+echo "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg arch=amd64] https://brave-browser-apt-release.s3.brave.com/ stable main"|sudo tee /etc/apt/sources.list.d/brave-browser-release.list
+
+sudo apt update
+
+sudo apt install brave-browser -y
+
+sudo apt install gawk wget git diffstat unzip texinfo gcc build-essential chrpath socat cpio python3 python3-pip python3-pexpect xz-utils debianutils iputils-ping python3-git python3-jinja2 libegl1-mesa libsdl1.2-dev xterm python3-subunit mesa-common-dev zstd liblz4-tool -y
+sudo apt install python3-pip gdb-multiarch valgrind kitty tmux xsel util-linux -y
+pip3 install pylint
+sudo apt-get install -y kmod build-essential build-essential flex bison xz-utils wget ca-certificates bc libncurses-dev
+
+sudo apt install qemu-kvm qemu-system qemu-utils python3 python3-pip libvirt-clients libvirt-daemon-system bridge-utils virtinst libvirt-daemon virt-manager -y
+
+sudo systemctl status libvirtd.service
+
+sudo virsh net-start default
+sudo virsh net-autostart default
+
+sudo usermod -aG libvirt $USER
+sudo usermod -aG libvirt-qemu $USER
+sudo usermod -aG kvm $USER
+sudo usermod -aG input $USER
+sudo usermod -aG disk $USER
+
+
+
+

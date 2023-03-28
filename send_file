@@ -1,0 +1,27 @@
+#!/bin/bash
+
+if [ $# -lt 1 ];then
+	echo "Usage $0 file"
+	exit
+fi
+
+if [ -z $BBB_HOSTNAME ];then
+	BBB_HOSTNAME=root
+fi
+if [ -z $BBB_IP ]; then
+	BBB_IP=10.42.0.127
+fi
+if [ -z $BBB_DESTINATION ]; then
+	BBB_DESTINATION=/home/root/test
+fi
+FILES=$*
+while [ -n "$1" ];do 
+	case "$1" in 
+		-h)BBB_HOSTNAME=$2 ;;
+		-i)BBB_IP=$2 ;;
+		-d)BBB_DESTINATION=$2 ;;
+		*) FILES=$* ;;
+	esac
+	shift
+done
+scp $FILES $BBB_HOSTNAME@$BBB_IP:$BBB_DESTINATION

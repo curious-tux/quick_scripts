@@ -1,0 +1,31 @@
+#!/bin/sh 
+sudo brctl addbr br0
+sudo ip addr flush dev eno1 
+sudo brctl addif br0 eno1
+sudo tunctl -t tap0 -u swastik
+sudo brctl addif br0 tap0
+sudo ifconfig eno1 up
+sudo ifconfig tap0 up
+sudo ifconfig br0 up
+#sudo dhclient br0
+
+sudo iptables -t nat -A POSTROUTING -s 172.16.0.1/24 -j MASQUERADE
+sudo ifconfig tap0 down
+sudo ifconfig br0 down
+sudo brctl delif br0 eno1
+sudo brctl delif br0 tap0
+sudo brctl delbr br0
+sudo tunctl -d tap0
+sudo brctl addbr br0
+sudo tunctl -u 1000
+sudo ifconfig eno1 0.0.0.0 promisc up
+sudo ifconfig tap0 0.0.0.0 promisc up
+sudo ifconfig br0 172.16.78.100 netmask 255.255.255.0 up
+sudo brctl stp br0 off
+sudo brctl setfd br0 1
+sudo brctl sethello br0 1
+sudo brctl addif br0 eno1
+sudo brctl addif br0 tap0
+sudo bash -c 'echo 1 > /proc/sys/net/ipv4/ip_forward'
+sudo bash -c 'echo 1 > /proc/sys/net/ipv4/conf/tap0/proxy_arp'
+sudo chmod 666 /dev/net/tun
